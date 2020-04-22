@@ -1,23 +1,39 @@
 const express = require('express');
+const OpenTok = require('opentok');
 
 const router = express.Router();
 
 const DataBase = require('../models/functions');
 
 /* GET users listing. */
-router.get('/api/joinbar', (req, res) => {
+router.get('/joinbar', (req, res) => {
   res.send('respond with a resource');
-  //grabs sessionID from database.
-  //generates token.
-  //sends token and session id.
+  try {
+    //grabs sessionID from database.
+    //generates token.
+    //sends token and session id.
+  } catch (e) {
+    return e;
+  }
 });
 
-router.post('/api/createbar', async (req, res) => {
+router.post('/createbar', async (req, res) => {
   res.send('Responded.');
-  const { sessionID, password, name } = req.body;
-  const response = await DataBase.addSession(sessionID, password, name);
+  const { password, name } = req.body;
+  let newSession = '';
+
+  OpenTok.createSession((err, session) => {
+    if (err) {
+      console.log(err);
+    } else {
+      newSession = session.sessionId;
+    }
+    console.log(newSession, name, password);
+  });
+  const sessionID = newSession;
+  const response = await DataBase.addSession(name, sessionID, password);
   console.log(response);
-  return response;
+  return sessionID;
 });
 
 module.exports = router;

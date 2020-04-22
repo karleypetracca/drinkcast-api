@@ -20,9 +20,9 @@ class Functions {
     }
   }
 
-  static async addSession(name, sessionID, token, password) {
-    const query = `INSERT INTO users (name, sessionID, token, password) VALUES (''${name}', '${sessionID}', ${token},${password})`;
+  static async addSession(name, sessionID, password) {
     try {
+      const query = `INSERT INTO users (name, sessionID, token, password) VALUES (''${name}', '${sessionID}',${password})`;
       const response = await db.result(query);
       return response;
     } catch (err) {
