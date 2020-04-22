@@ -9,10 +9,10 @@ const DataBase = require('../models/functions');
 /* GET users listing. */
 router.get('/joinbar', (req, res) => {
   res.send('respond with a resource');
+  const API_KEY = process.env.OT_API;
+  const API_SECRET = process.env.OT_API_SECRET; //these should grab from the env file.
 
   const opentok = new OpenTok(API_KEY, API_SECRET);
-  //needs to grab these from somewhere.
-  //Generate a basic session. Or you could use an existing session ID.
 
   let sessionId;
   let token;
