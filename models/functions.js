@@ -1,4 +1,5 @@
 const db = require('./conn.js');
+require('dotenv').config();
 
 class Functions {
   constructor(id, token, password, sessionID, name) {
@@ -22,8 +23,8 @@ class Functions {
 
   static async addSession(name, sessionID, password) {
     try {
-      const query = `INSERT INTO users (name, sessionID, token, password) VALUES (''${name}', '${sessionID}',${password})`;
-      const response = await db.result(query);
+      const query = `INSERT INTO users (name, sessionID, password) VALUES ($1, $2, $3) RETURNING id`;
+      const response = await db.one(query, [name, sessionID, password]);
       return response;
     } catch (err) {
       return err.message;
