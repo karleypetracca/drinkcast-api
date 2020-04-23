@@ -9,7 +9,7 @@ class Functions {
     this.sessionID = sessionID;
   }
 
-  static async getById(sessionID) {
+  static async getBarNames() {
     try {
       const response = await db.one(
         `select * from users where sessionID = ${sessionID}`,
@@ -46,6 +46,17 @@ class Functions {
     try {
       const response = await db.one(
         'SELECT * FROM never_have_i_ever ORDER BY random() LIMIT 1;',
+      );
+      return response;
+    } catch (err) {
+      return err.message;
+    }
+  }
+
+  static async getWouldYouRather() {
+    try {
+      const response = await db.one(
+        'SELECT * FROM would_you_rather ORDER BY random() LIMIT 1;',
       );
       console.log(response);
       return response;

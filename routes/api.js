@@ -14,7 +14,6 @@ router.post('/joinbar', async (req, res) => {
   const { joinBar, password } = req.body;
   // let token;
   const response = await DataBase.getByBarName(joinBar);
-  console.log('first response is: ', response);
   const sessionId = response.sessionid;
   // Generate a token. Token options possible for later
   // const tokenOptions = {};
@@ -29,28 +28,27 @@ router.post('/joinbar', async (req, res) => {
 router.post('/createbar', (req, res) => {
   const { password, barName } = req.body;
   let newSession = '';
-
-  opentok.createSession(async (err, session) => {
+  opentok.createSession((err, session) => {
     if (err) {
       console.log('Error creating session: ', err);
     } else {
       newSession = session.sessionId;
-      console.log('The new session id here is: ', newSession);
-      const response = await DataBase.addSession(barName, newSession, password);
+      const token = session.generateToken();
+      const response = DataBase.addSession(barName, newSession, password);
       console.log('response', response);
+      res.json({ newSession, token }).status(200);
     }
-    console.log(newSession, password);
   });
-  console.log('The new session id is: ', newSession);
-  console.log('the above should be new session');
-  res.json({ newSession }).status(200);
 });
 
 // game-related api posts
 router.get('/neverhaveiever', async (req, res) => {
   const response = await DataBase.getNeverHaveIEver();
-  console.log(response);
+  res.json(response).status(200);
+});
 
+router.get('/wouldyourather', async (req, res) => {
+  const response = await DataBase.getWouldYouRather();
   res.json(response).status(200);
 });
 
