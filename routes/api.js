@@ -14,7 +14,6 @@ router.post('/joinbar', async (req, res) => {
   const { joinBar, password } = req.body;
   // let token;
   const response = await DataBase.getByBarName(joinBar);
-  console.log(response);
   const sessionId = response.sessionid;
   // Generate a token. Token options possible for later
   // const tokenOptions = {};
