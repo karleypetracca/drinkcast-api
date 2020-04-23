@@ -1,7 +1,7 @@
 const express = require('express');
 const OpenTok = require('opentok');
-require('dotenv').config();
 const DataBase = require('../models/functions');
+require('dotenv').config();
 
 const router = express.Router();
 
@@ -37,7 +37,6 @@ router.get('/joinbar', (req, res) => {
 });
 
 router.post('/createbar', (req, res) => {
-  res.send('Responded.');
   const { password, barName } = req.body;
   let newSession = '';
 
@@ -51,7 +50,8 @@ router.post('/createbar', (req, res) => {
     }
     console.log(newSession, password);
   });
-  return newSession;
+
+  res.json({ newSession }).status(200);
 });
 
 module.exports = router;
