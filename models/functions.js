@@ -9,7 +9,7 @@ class Functions {
     this.sessionID = sessionID;
   }
 
-  static async getById(sessionID) {
+  static async getBarNames() {
     try {
       const response = await db.one(
         `select * from users where sessionID = ${sessionID}`,
