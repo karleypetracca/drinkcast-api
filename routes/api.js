@@ -47,8 +47,11 @@ router.post('/createbar', (req, res) => {
 // game-related api posts
 router.get('/neverhaveiever', async (req, res) => {
   const response = await DataBase.getNeverHaveIEver();
-  console.log(response);
+  res.json(response).status(200);
+});
 
+router.get('/wouldyourather', async (req, res) => {
+  const response = await DataBase.getWouldYouRather();
   res.json(response).status(200);
 });
 
