@@ -40,6 +40,18 @@ class Functions {
       return err.message;
     }
   }
+
+  static async getNeverHaveIEver() {
+    try {
+      const response = await db.one(
+        'SELECT * FROM never_have_i_ever ORDER BY random() LIMIT 1;',
+      );
+      console.log(response);
+      return response;
+    } catch (err) {
+      return err.message;
+    }
+  }
 }
 
 module.exports = Functions;
