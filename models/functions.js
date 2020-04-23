@@ -20,6 +20,17 @@ class Functions {
     }
   }
 
+  static async getByBarName(name) {
+    try {
+      const response = await db.one(
+        'SELECT * FROM users WHERE name = $1', [name],
+      );
+      return response;
+    } catch (err) {
+      return err.message;
+    }
+  }
+
   static async addSession(name, sessionID, password) {
     try {
       const query =
