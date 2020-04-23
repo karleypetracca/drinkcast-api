@@ -33,9 +33,10 @@ router.post('/createbar', (req, res) => {
       console.log('Error creating session:', err);
     } else {
       newSession = session.sessionId;
+      const token = session.generateToken();
       const response = DataBase.addSession(barName, newSession, password);
       console.log('response', response);
-      res.json({ newSession }).status(200);
+      res.json({ newSession, token }).status(200);
     }
   });
 
