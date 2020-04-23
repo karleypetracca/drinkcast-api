@@ -14,7 +14,7 @@ router.post('/joinbar', async (req, res) => {
   const { joinBar, password } = req.body;
   // let token;
   const response = await DataBase.getByBarName(joinBar);
-  console.log(response);
+  console.log('first response is: ', response);
   const sessionId = response.sessionid;
   // Generate a token. Token options possible for later
   // const tokenOptions = {};
@@ -30,17 +30,19 @@ router.post('/createbar', (req, res) => {
   const { password, barName } = req.body;
   let newSession = '';
 
-  opentok.createSession((err, session) => {
+  opentok.createSession(async (err, session) => {
     if (err) {
-      console.log('Error creating session:', err);
+      console.log('Error creating session: ', err);
     } else {
       newSession = session.sessionId;
-      const response = DataBase.addSession(barName, newSession, password);
+      console.log('The new session id here is: ', newSession);
+      const response = await DataBase.addSession(barName, newSession, password);
       console.log('response', response);
     }
     console.log(newSession, password);
   });
-
+  console.log('The new session id is: ', newSession);
+  console.log('the above should be new session');
   res.json({ newSession }).status(200);
 });
 

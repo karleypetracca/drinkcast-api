@@ -53,6 +53,14 @@ class Functions {
       return err.message;
     }
   }
+
+  static async getQuestion() {
+    try {
+      const response = await fetch('https://www.rrrather.com/botapi');
+    } catch (e) {
+      return e;
+    }
+  }
 }
 
 module.exports = Functions;
