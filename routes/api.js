@@ -43,4 +43,12 @@ router.post('/createbar', (req, res) => {
   res.json({ newSession }).status(200);
 });
 
+// game-related api posts
+router.get('/neverhaveiever', async (req, res) => {
+  const response = await DataBase.getNeverHaveIEver();
+  console.log(response);
+
+  res.json(response).status(200);
+});
+
 module.exports = router;
