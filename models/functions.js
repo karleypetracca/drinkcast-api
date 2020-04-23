@@ -65,6 +65,18 @@ class Functions {
     }
   }
 
+  static async checkIfNameIsInUse(name) {
+    try {
+      const prospectiveName = await this.getByBarName(name);
+      if (name === prospectiveName.name) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return e;
+    }
+  }
+
   static async getQuestion() {
     try {
       const response = await fetch('https://www.rrrather.com/botapi');
