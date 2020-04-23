@@ -14,7 +14,6 @@ router.post('/joinbar', async (req, res) => {
   const { joinBar, password } = req.body;
   // let token;
   const response = await DataBase.getByBarName(joinBar);
-  console.log(response);
   const sessionId = response.sessionid;
   // Generate a token. Token options possible for later
   // const tokenOptions = {};
@@ -29,7 +28,6 @@ router.post('/joinbar', async (req, res) => {
 router.post('/createbar', (req, res) => {
   const { password, barName } = req.body;
   let newSession = '';
-
   opentok.createSession((err, session) => {
     if (err) {
       console.log('Error creating session:', err);
@@ -37,11 +35,10 @@ router.post('/createbar', (req, res) => {
       newSession = session.sessionId;
       const response = DataBase.addSession(barName, newSession, password);
       console.log('response', response);
+      res.json({ newSession }).status(200);
     }
-    console.log(newSession, password);
   });
 
-  res.json({ newSession }).status(200);
 });
 
 // game-related api posts
