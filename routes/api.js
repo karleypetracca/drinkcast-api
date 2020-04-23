@@ -9,7 +9,7 @@ const API_KEY = process.env.OT_API;
 const API_SECRET = process.env.OT_API_SECRET; // these should grab from the env file.
 const opentok = new OpenTok(API_KEY, API_SECRET);
 
-/* GET users listing. */
+// get a token for an existing opentok session
 router.post('/joinbar', async (req, res) => {
   const { joinBar, password } = req.body;
   // let token;
@@ -20,29 +20,31 @@ router.post('/joinbar', async (req, res) => {
   // tokenOptions.role = 'publisher';
   // tokenOptions.data = 'username=bob';
   const token = opentok.generateToken(sessionId);
-
+  const key = API_KEY;
   // sends token and session id.
-  res.json({ sessionId, token }).status(200);
+  res.json({ sessionId, token, key }).status(200);
 });
 
+// create a new opentok session and token
 router.post('/createbar', async (req, res) => {
   const { password, barName } = req.body;
+  let newSession = '';
   const nameCheck = await DataBase.checkIfNameIsInUse(barName);
   console.log('namecheck is: ', nameCheck);
   if (nameCheck === true) {
     console.log('true');
     res.json({ nameIsInConflict: 'Sorry. That name is taken!' });
   } else {
-    console.log("we're firing off and making a database entry!");
-    let newSession = '';
     opentok.createSession((err, session) => {
       if (err) {
-        console.log('Error creating session: ', err);
+        console.log('Error creating session:', err);
       } else {
         newSession = session.sessionId;
         const token = session.generateToken();
+        const key = API_KEY;
         const response = DataBase.addSession(barName, newSession, password);
-        res.json({ newSession, token }).status(200);
+        console.log('response', response);
+        res.json({ newSession, token, key }).status(200);
       }
     });
   }
