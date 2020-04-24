@@ -21,7 +21,7 @@ router.post('/joinbar', async (req, res) => {
     res.json({ sessionId, token, key }).status(200);
   } else {
     res.json({
-      error: 'Sorry! Either the password of username is incorrect!',
+      error: 'Sorry! Either the password or bar name is incorrect!',
     });
   }
 });
