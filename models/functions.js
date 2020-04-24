@@ -68,7 +68,7 @@ class Functions {
   static async checkIfNameIsInUse(name) {
     try {
       const prospectiveName = await this.getByBarName(name);
-      if (name === prospectiveName.name) {
+      if (name === prospectiveName.name) {x`x`
         return true;
       }
       return false;
@@ -84,6 +84,25 @@ class Functions {
       return e;
     }
   }
+
+  static async changeNumInBar(name, newNum) {
+    try {
+      const response = await db.one(`UPDATE users SET inbar = ${newNum} WHERE name = ${name};`);
+      return response;
+    } catch (err) {
+      return err.message;
+    }
+  }
+
+  static async getNumInBar(name) {
+    try {
+      const response = await db.one(`SELECT inbar FROM users WHERE name = ${name};`);
+      return response;
+    } catch (err) {
+      return err.message;
+    }
+  }
 }
+
 
 module.exports = Functions;
