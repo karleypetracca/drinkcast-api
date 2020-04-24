@@ -31,9 +31,17 @@ router.post('/createbar', async (req, res) => {
   let newSession = '';
   const nameCheck = await DataBase.checkIfNameIsInUse(barName);
   console.log('namecheck is: ', nameCheck);
-  if (nameCheck === true) {
-    console.log('true');
-    res.json({ nameIsInConflict: 'Sorry. That name is taken!' });
+  if (nameCheck === true || password.length <= 4) {
+    if (nameCheck === true) {
+      res.json({
+        nameIsInConflict: 'Sorry. That name is taken!',
+      });
+    }
+    if (password.length <= 4) {
+      res.json({
+        passwordIncorrectLength: 'Sorry! That password is too short!',
+      });
+    }
   } else {
     opentok.createSession((err, session) => {
       if (err) {
