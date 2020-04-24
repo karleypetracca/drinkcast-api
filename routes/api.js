@@ -26,21 +26,28 @@ router.post('/joinbar', async (req, res) => {
 });
 
 // create a new opentok session and token
-router.post('/createbar', (req, res) => {
+router.post('/createbar', async (req, res) => {
   const { password, barName } = req.body;
   let newSession = '';
-  opentok.createSession((err, session) => {
-    if (err) {
-      console.log('Error creating session:', err);
-    } else {
-      newSession = session.sessionId;
-      const token = session.generateToken();
-      const key = API_KEY;
-      const response = DataBase.addSession(barName, newSession, password);
-      console.log('response', response);
-      res.json({ newSession, token, key }).status(200);
-    }
-  });
+  const nameCheck = await DataBase.checkIfNameIsInUse(barName);
+  console.log('namecheck is: ', nameCheck);
+  if (nameCheck === true) {
+    console.log('true');
+    res.json({ nameIsInConflict: 'Sorry. That name is taken!' });
+  } else {
+    opentok.createSession((err, session) => {
+      if (err) {
+        console.log('Error creating session:', err);
+      } else {
+        newSession = session.sessionId;
+        const token = session.generateToken();
+        const key = API_KEY;
+        const response = DataBase.addSession(barName, newSession, password);
+        console.log('response', response);
+        res.json({ newSession, token, key }).status(200);
+      }
+    });
+  }
 });
 
 // game-related api posts

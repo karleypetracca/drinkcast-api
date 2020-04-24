@@ -22,9 +22,9 @@ class Functions {
 
   static async getByBarName(name) {
     try {
-      const response = await db.one(
-        'SELECT * FROM users WHERE name = $1', [name],
-      );
+      const response = await db.one('SELECT * FROM users WHERE name = $1', [
+        name,
+      ]);
       return response;
     } catch (err) {
       return err.message;
@@ -33,7 +33,8 @@ class Functions {
 
   static async addSession(name, sessionID, password) {
     try {
-      const query = 'INSERT INTO users (name, sessionID, password) VALUES ($1, $2, $3) RETURNING id';
+      const query =
+        'INSERT INTO users (name, sessionID, password) VALUES ($1, $2, $3) RETURNING id';
       const response = await db.one(query, [name, sessionID, password]);
       return response;
     } catch (err) {
@@ -61,6 +62,26 @@ class Functions {
       return response;
     } catch (err) {
       return err.message;
+    }
+  }
+
+  static async checkIfNameIsInUse(name) {
+    try {
+      const prospectiveName = await this.getByBarName(name);
+      if (name === prospectiveName.name) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return e;
+    }
+  }
+
+  static async getQuestion() {
+    try {
+      const response = await fetch('https://www.rrrather.com/botapi');
+    } catch (e) {
+      return e;
     }
   }
 }
