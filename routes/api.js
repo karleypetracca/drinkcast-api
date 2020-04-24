@@ -6,7 +6,7 @@ require('dotenv').config();
 const router = express.Router();
 
 const API_KEY = process.env.OT_API;
-const API_SECRET = process.env.OT_API_SECRET; // these should grab from the env file.
+const API_SECRET = process.env.OT_API_SECRET;
 const opentok = new OpenTok(API_KEY, API_SECRET);
 
 // get a token for an existing opentok session
@@ -14,15 +14,16 @@ router.post('/joinbar', async (req, res) => {
   const { joinBar, password } = req.body;
   // let token;
   const response = await DataBase.getByBarName(joinBar);
-  const sessionId = response.sessionid;
-  // Generate a token. Token options possible for later
-  // const tokenOptions = {};
-  // tokenOptions.role = 'publisher';
-  // tokenOptions.data = 'username=bob';
-  const token = opentok.generateToken(sessionId);
-  const key = API_KEY;
-  // sends token and session id.
-  res.json({ sessionId, token, key }).status(200);
+  if (response.password === password) {
+    const sessionId = response.sessionid;
+    const token = opentok.generateToken(sessionId);
+    const key = API_KEY;
+    res.json({ sessionId, token, key }).status(200);
+  } else {
+    res.json({
+      incorrectInput: 'Sorry! Either the password of username is incorrect!',
+    });
+  }
 });
 
 // create a new opentok session and token
