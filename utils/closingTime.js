@@ -10,7 +10,7 @@ const cleanupBar = async () => {
   response.forEach(async (bar) => {
     const lastAccess = moment(bar.lastaccess);
     if (lastAccess.isSameOrBefore(hourBefore)) {
-      console.log('is before');
+      // eslint-disable-next-line no-unused-vars
       const deletedBar = await DataBase.deleteBar(bar.id);
     }
   });
