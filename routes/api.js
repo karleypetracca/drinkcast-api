@@ -67,10 +67,6 @@ router.post('/updatebar', async (req, res) => {
   res.sendStatus(200);
 });
 
-// router.get('/deletebartest', async (req, res) => {
-//   const response = 
-// });
-
 // game-related api posts
 router.get('/neverhaveiever', async (req, res) => {
   const response = await DataBase.getNeverHaveIEver();

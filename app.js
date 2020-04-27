@@ -6,6 +6,7 @@ const cors = require('cors');
 
 const indexRouter = require('./routes/index');
 const apiRouter = require('./routes/api');
+const closingTime = require('./utils/closingTime');
 
 const app = express();
 

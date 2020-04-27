@@ -89,6 +89,16 @@ class Functions {
   static async getLastAccess() {
     try {
       const response = await db.any('SELECT id, lastaccess FROM users;');
+      return response;
+    } catch (err) {
+      return err.message;
+    }
+  }
+
+  static async deleteBar(id) {
+    try {
+      const response = await db.one(`DELETE FROM users WHERE id = ${id};`);
+      return response;
     } catch (err) {
       return err.message;
     }
