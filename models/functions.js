@@ -79,8 +79,16 @@ class Functions {
 
   static async updateLastAccess(name, now) {
     try {
-      const response = await db.one(`UPDATE users SET lastaccess = ${now} WHERE name = ${name};`);
+      const response = await db.one(`UPDATE users SET lastaccess = '${now}' WHERE name = '${name}';`);
       return response;
+    } catch (err) {
+      return err.message;
+    }
+  }
+
+  static async getLastAccess() {
+    try {
+      const response = await db.any('SELECT id, lastaccess FROM users;');
     } catch (err) {
       return err.message;
     }
