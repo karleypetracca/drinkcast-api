@@ -68,7 +68,7 @@ class Functions {
   static async checkIfNameIsInUse(name) {
     try {
       const prospectiveName = await this.getByBarName(name);
-      if (name === prospectiveName.name) {
+      if (name === prospectiveName.name) {x`x`
         return true;
       }
       return false;
@@ -77,11 +77,30 @@ class Functions {
     }
   }
 
-  static async getQuestion() {
+  static async updateLastAccess(name, now) {
     try {
-      const response = await fetch('https://www.rrrather.com/botapi');
-    } catch (e) {
-      return e;
+      const response = await db.one(`UPDATE users SET lastaccess = '${now}' WHERE name = '${name}';`);
+      return response;
+    } catch (err) {
+      return err.message;
+    }
+  }
+
+  static async getLastAccess() {
+    try {
+      const response = await db.any('SELECT id, lastaccess FROM users;');
+      return response;
+    } catch (err) {
+      return err.message;
+    }
+  }
+
+  static async deleteBar(id) {
+    try {
+      const response = await db.one(`DELETE FROM users WHERE id = ${id};`);
+      return response;
+    } catch (err) {
+      return err.message;
     }
   }
 }

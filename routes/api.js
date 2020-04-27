@@ -1,4 +1,5 @@
 const express = require('express');
+const moment = require('moment');
 const OpenTok = require('opentok');
 const DataBase = require('../models/functions');
 require('dotenv').config();
@@ -52,11 +53,18 @@ router.post('/createbar', async (req, res) => {
         const token = session.generateToken();
         const key = API_KEY;
         const response = DataBase.addSession(barName, newSession, password);
-        console.log('response', response);
         res.json({ newSession, token, key }).status(200);
       }
     });
   }
+});
+
+router.post('/updatebar', async (req, res) => {
+  const { barName } = req.body;
+  console.log('barName', barName);
+  const now = moment().format('YYYY-MM-DD HH:mm:ss');
+  const response = await DataBase.updateLastAccess(barName, now);
+  res.sendStatus(200);
 });
 
 // game-related api posts
