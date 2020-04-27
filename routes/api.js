@@ -22,7 +22,7 @@ router.post('/joinbar', async (req, res) => {
     res.json({ sessionId, token, key }).status(200);
   } else {
     res.json({
-      incorrectInput: 'Sorry! Either the password of username is incorrect!',
+      error: 'Sorry! Either the password or bar name is incorrect!',
     });
   }
 });
@@ -36,12 +36,12 @@ router.post('/createbar', async (req, res) => {
   if (nameCheck === true || password.length <= 4) {
     if (nameCheck === true) {
       res.json({
-        nameIsInConflict: 'Sorry. That name is taken!',
+        error: 'Sorry. That name is taken!',
       });
     }
     if (password.length <= 4) {
       res.json({
-        passwordIncorrectLength: 'Sorry! That password is too short!',
+        error: 'Sorry! That password is too short!',
       });
     }
   } else {
