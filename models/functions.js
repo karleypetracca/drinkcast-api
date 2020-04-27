@@ -77,26 +77,9 @@ class Functions {
     }
   }
 
-  static async getQuestion() {
+  static async updateLastAccess(name, now) {
     try {
-      const response = await fetch('https://www.rrrather.com/botapi');
-    } catch (e) {
-      return e;
-    }
-  }
-
-  static async changeNumInBar(name, newNum) {
-    try {
-      const response = await db.one(`UPDATE users SET inbar = ${newNum} WHERE name = ${name};`);
-      return response;
-    } catch (err) {
-      return err.message;
-    }
-  }
-
-  static async getNumInBar(name) {
-    try {
-      const response = await db.one(`SELECT inbar FROM users WHERE name = ${name};`);
+      const response = await db.one(`UPDATE users SET lastaccess = ${now} WHERE name = ${name};`);
       return response;
     } catch (err) {
       return err.message;

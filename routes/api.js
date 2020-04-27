@@ -1,4 +1,5 @@
 const express = require('express');
+const moment = require('moment');
 const OpenTok = require('opentok');
 const DataBase = require('../models/functions');
 require('dotenv').config();
@@ -57,6 +58,15 @@ router.post('/createbar', async (req, res) => {
       }
     });
   }
+});
+
+router.post('/updatebar', async (req, res) => {
+  const { barName } = req.body;
+  // console.log('barName', barName);
+  const now = moment();
+  // console.log(now);
+  // const numInBar = await DataBase.getNumInBar(barName);
+  // const newNumInBar = numInBar + inBar;
 });
 
 // game-related api posts
