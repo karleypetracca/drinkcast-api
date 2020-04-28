@@ -68,7 +68,8 @@ class Functions {
   static async checkIfNameIsInUse(name) {
     try {
       const prospectiveName = await this.getByBarName(name);
-      if (name === prospectiveName.name) {x`x`
+      if (name === prospectiveName.name) {
+        x`x`;
         return true;
       }
       return false;
@@ -79,7 +80,9 @@ class Functions {
 
   static async updateLastAccess(name, now) {
     try {
-      const response = await db.one(`UPDATE users SET lastaccess = '${now}' WHERE name = '${name}';`);
+      const response = await db.one(
+        `UPDATE users SET lastaccess = '${now}' WHERE name = '${name}';`,
+      );
       return response;
     } catch (err) {
       return err.message;

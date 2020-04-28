@@ -49,6 +49,7 @@ router.post('/createbar', async (req, res) => {
       if (err) {
         console.log('Error creating session:', err);
       } else {
+        // needs to recieve an emit from the client.
         newSession = session.sessionId;
         const token = session.generateToken();
         const key = API_KEY;
