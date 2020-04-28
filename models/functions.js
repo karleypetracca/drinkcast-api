@@ -69,7 +69,6 @@ class Functions {
     try {
       const prospectiveName = await this.getByBarName(name);
       if (name === prospectiveName.name) {
-        x`x`;
         return true;
       }
       return false;

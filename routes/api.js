@@ -13,9 +13,10 @@ const opentok = new OpenTok(API_KEY, API_SECRET);
 // get a token for an existing opentok session
 router.post('/joinbar', async (req, res) => {
   const { joinBar, password } = req.body;
-  // let token;
-  const response = await DataBase.getByBarName(joinBar);
-  if (response.password === password) {
+  const saniBarName = joinBar.toLowerCase().trim();
+  const saniPassword = password.toLowerCase().trim();
+  const response = await DataBase.getByBarName(saniBarName);
+  if (response.password === saniPassword) {
     const sessionId = response.sessionid;
     const token = opentok.generateToken(sessionId);
     const key = API_KEY;
@@ -53,27 +54,32 @@ router.post('/createbar', async (req, res) => {
         newSession = session.sessionId;
         const token = session.generateToken();
         const key = API_KEY;
-        const response = DataBase.addSession(barName, newSession, password);
+        const saniBarName = barName.toLowerCase().trim();
+        const saniPassword = password.toLowerCase().trim();
+        const response = DataBase.addSession(saniBarName, newSession, saniPassword);
         res.json({ newSession, token, key }).status(200);
       }
     });
   }
 });
 
+// update latest bar access
 router.post('/updatebar', async (req, res) => {
   const { barName } = req.body;
   console.log('barName', barName);
   const now = moment().format('YYYY-MM-DD HH:mm:ss');
-  const response = await DataBase.updateLastAccess(barName, now);
+  const saniBarName = barName.toLowerCase().trim();
+  const response = await DataBase.updateLastAccess(saniBarName, now);
   res.sendStatus(200);
 });
 
-// game-related api posts
+// game-related api posts - never have i ever
 router.get('/neverhaveiever', async (req, res) => {
   const response = await DataBase.getNeverHaveIEver();
   res.json(response).status(200);
 });
 
+// game-related api posts - would you rather
 router.get('/wouldyourather', async (req, res) => {
   const response = await DataBase.getWouldYouRather();
   res.json(response).status(200);
