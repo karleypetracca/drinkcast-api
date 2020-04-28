@@ -68,7 +68,7 @@ class Functions {
   static async checkIfNameIsInUse(name) {
     try {
       const prospectiveName = await this.getByBarName(name);
-      if (name === prospectiveName.name) {x`x`
+      if (name === prospectiveName.name) {
         return true;
       }
       return false;
