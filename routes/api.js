@@ -16,7 +16,6 @@ router.post('/joinbar', async (req, res) => {
   const saniBarName = joinBar.toLowerCase().trim();
   const saniPassword = password.toLowerCase().trim();
   const response = await DataBase.getByBarName(saniBarName);
-  console.log(response);
   if (response.password === saniPassword) {
     const sessionId = response.sessionid;
     const token = opentok.generateToken(sessionId);
@@ -41,7 +40,6 @@ router.post('/createbar', async (req, res) => {
   const { password, barName } = req.body;
   let newSession = '';
   const nameCheck = await DataBase.checkIfNameIsInUse(barName);
-  console.log('namecheck is: ', nameCheck);
   if (nameCheck === true || password.length <= 4) {
     if (nameCheck === true) {
       res.json({
@@ -56,6 +54,7 @@ router.post('/createbar', async (req, res) => {
   } else {
     opentok.createSession((err, session) => {
       if (err) {
+        // eslint-disable-next-line no-console
         console.log('Error creating session:', err);
       } else {
         newSession = session.sessionId;
@@ -63,6 +62,7 @@ router.post('/createbar', async (req, res) => {
         const key = API_KEY;
         const saniBarName = barName.toLowerCase().trim();
         const saniPassword = password.toLowerCase().trim();
+        // eslint-disable-next-line no-unused-vars
         const response = DataBase.addSession(saniBarName, newSession, saniPassword);
         res.json({ newSession, token, key }).status(200);
       }
@@ -73,9 +73,9 @@ router.post('/createbar', async (req, res) => {
 // update latest bar access
 router.post('/updatebar', async (req, res) => {
   const { barName } = req.body;
-  console.log('barName', barName);
   const now = moment().format('YYYY-MM-DD HH:mm:ss');
   const saniBarName = barName.toLowerCase().trim();
+  // eslint-disable-next-line no-unused-vars
   const response = await DataBase.updateLastAccess(saniBarName, now);
   res.sendStatus(200);
 });
