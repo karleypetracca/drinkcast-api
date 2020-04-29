@@ -22,9 +22,16 @@ router.post('/joinbar', async (req, res) => {
     const key = API_KEY;
     res.json({ sessionId, token, key }).status(200);
   } else {
-    res.json({
-      error: 'Sorry! Either the password or bar name is incorrect!',
-    });
+    if (response === 'No data returned from the query.') {
+      res.json({
+        error: 'Sorry! That bar does not exist!',
+      }).status(200);
+    }
+    if (response.password !== saniPassword) {
+      res.json({
+        error: 'Sorry! The password is incorrect!',
+      }).status(200);
+    }
   }
 });
 
@@ -33,21 +40,21 @@ router.post('/createbar', async (req, res) => {
   const { password, barName } = req.body;
   let newSession = '';
   const nameCheck = await DataBase.checkIfNameIsInUse(barName);
-  console.log('namecheck is: ', nameCheck);
   if (nameCheck === true || password.length <= 4) {
     if (nameCheck === true) {
       res.json({
         error: 'Sorry. That name is taken!',
-      });
+      }).status(200);
     }
     if (password.length <= 4) {
       res.json({
         error: 'Sorry! That password is too short!',
-      });
+      }).status(200);
     }
   } else {
     opentok.createSession((err, session) => {
       if (err) {
+        // eslint-disable-next-line no-console
         console.log('Error creating session:', err);
       } else {
         // needs to recieve an emit from the client.
@@ -56,6 +63,7 @@ router.post('/createbar', async (req, res) => {
         const key = API_KEY;
         const saniBarName = barName.toLowerCase().trim();
         const saniPassword = password.toLowerCase().trim();
+        // eslint-disable-next-line no-unused-vars
         const response = DataBase.addSession(saniBarName, newSession, saniPassword);
         res.json({ newSession, token, key }).status(200);
       }
@@ -66,9 +74,9 @@ router.post('/createbar', async (req, res) => {
 // update latest bar access
 router.post('/updatebar', async (req, res) => {
   const { barName } = req.body;
-  console.log('barName', barName);
   const now = moment().format('YYYY-MM-DD HH:mm:ss');
   const saniBarName = barName.toLowerCase().trim();
+  // eslint-disable-next-line no-unused-vars
   const response = await DataBase.updateLastAccess(saniBarName, now);
   res.sendStatus(200);
 });
