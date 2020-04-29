@@ -16,15 +16,23 @@ router.post('/joinbar', async (req, res) => {
   const saniBarName = joinBar.toLowerCase().trim();
   const saniPassword = password.toLowerCase().trim();
   const response = await DataBase.getByBarName(saniBarName);
+  console.log(response);
   if (response.password === saniPassword) {
     const sessionId = response.sessionid;
     const token = opentok.generateToken(sessionId);
     const key = API_KEY;
     res.json({ sessionId, token, key }).status(200);
   } else {
-    res.json({
-      error: 'Sorry! Either the password or bar name is incorrect!',
-    });
+    if (response === 'No data returned from the query.') {
+      res.json({
+        error: 'Sorry! That bar does not exist!',
+      }).status(200);
+    }
+    if (response.password !== saniPassword) {
+      res.json({
+        error: 'Sorry! The password is incorrect!',
+      }).status(200);
+    }
   }
 });
 
@@ -38,12 +46,12 @@ router.post('/createbar', async (req, res) => {
     if (nameCheck === true) {
       res.json({
         error: 'Sorry. That name is taken!',
-      });
+      }).status(200);
     }
     if (password.length <= 4) {
       res.json({
         error: 'Sorry! That password is too short!',
-      });
+      }).status(200);
     }
   } else {
     opentok.createSession((err, session) => {
