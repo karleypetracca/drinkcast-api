@@ -84,7 +84,7 @@ class Functions {
 
   static async deleteBar(id) {
     try {
-      const response = await db.one(`DELETE FROM users WHERE id = ${id};`);
+      const response = await db.one(`DELETE FROM users WHERE id = ${id} RETURNING id;`);
       return response;
     } catch (err) {
       return err.message;
