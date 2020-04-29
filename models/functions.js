@@ -9,17 +9,6 @@ class Functions {
     this.sessionID = sessionID;
   }
 
-  static async getBarNames() {
-    try {
-      const response = await db.one(
-        `select * from users where sessionID = ${sessionID}`,
-      );
-      return response;
-    } catch (err) {
-      return err.message;
-    }
-  }
-
   static async getByBarName(name) {
     try {
       const response = await db.one('SELECT * FROM users WHERE name = $1', [
@@ -33,8 +22,7 @@ class Functions {
 
   static async addSession(name, sessionID, password) {
     try {
-      const query =
-        'INSERT INTO users (name, sessionID, password) VALUES ($1, $2, $3) RETURNING id';
+      const query = 'INSERT INTO users (name, sessionID, password) VALUES ($1, $2, $3) RETURNING id';
       const response = await db.one(query, [name, sessionID, password]);
       return response;
     } catch (err) {
@@ -58,7 +46,6 @@ class Functions {
       const response = await db.one(
         'SELECT * FROM would_you_rather ORDER BY random() LIMIT 1;',
       );
-      console.log(response);
       return response;
     } catch (err) {
       return err.message;
