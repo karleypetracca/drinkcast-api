@@ -1,6 +1,16 @@
+@font-face {
+  font-family: 'uomouploaded_file';
+  src: url('uomo-webfont.woff2') format('woff2'),
+    url('uomo-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-family: 'uomouploaded_file', 'Roboto', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
 }
 
 a {
