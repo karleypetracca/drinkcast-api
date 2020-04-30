@@ -11,7 +11,7 @@ class Functions {
 
   static async getByBarName(name) {
     try {
-      const response = await db.one('SELECT * FROM users WHERE name = $1', [
+      const response = await db.one('SELECT * FROM bars WHERE name = $1', [
         name,
       ]);
       return response;
@@ -22,7 +22,7 @@ class Functions {
 
   static async addSession(name, sessionID, password) {
     try {
-      const query = 'INSERT INTO users (name, sessionID, password) VALUES ($1, $2, $3) RETURNING id';
+      const query = 'INSERT INTO bars (name, sessionID, password) VALUES ($1, $2, $3) RETURNING id';
       const response = await db.one(query, [name, sessionID, password]);
       return response;
     } catch (err) {
@@ -66,9 +66,7 @@ class Functions {
 
   static async updateLastAccess(name, now) {
     try {
-      const response = await db.one(
-        `UPDATE users SET lastaccess = '${now}' WHERE name = '${name}';`,
-      );
+      const response = await db.one(`UPDATE bars SET lastaccess = '${now}' WHERE name = '${name}';`);
       return response;
     } catch (err) {
       return err.message;
@@ -77,7 +75,7 @@ class Functions {
 
   static async getLastAccess() {
     try {
-      const response = await db.any('SELECT id, lastaccess FROM users;');
+      const response = await db.any('SELECT id, lastaccess FROM bars;');
       return response;
     } catch (err) {
       return err.message;
@@ -86,7 +84,7 @@ class Functions {
 
   static async deleteBar(id) {
     try {
-      const response = await db.one(`DELETE FROM users WHERE id = ${id} RETURNING id;`);
+      const response = await db.one(`DELETE FROM bars WHERE id = ${id} RETURNING id;`);
       return response;
     } catch (err) {
       return err.message;
