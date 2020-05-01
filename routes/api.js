@@ -48,7 +48,7 @@ router.post('/createbar', async (req, res) => {
     }
     if (password.length <= 4) {
       res.json({
-        error: 'Sorry! That password is too short!',
+        error: 'Sorry! The password needs to be at least 5 characters long.',
       }).status(200);
     }
   } else {
