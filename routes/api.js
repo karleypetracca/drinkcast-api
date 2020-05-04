@@ -1,5 +1,6 @@
 const express = require('express');
 const moment = require('moment');
+const bcrypt = require('bcryptjs');
 const OpenTok = require('opentok');
 const DataBase = require('../models/functions');
 require('dotenv').config();
@@ -14,9 +15,10 @@ const opentok = new OpenTok(API_KEY, API_SECRET);
 router.post('/joinbar', async (req, res) => {
   const { joinBar, password } = req.body;
   const saniBarName = joinBar.toLowerCase().trim();
-  const saniPassword = password.toLowerCase().trim();
+  const saniPassword = password.trim();
   const response = await DataBase.getByBarName(saniBarName);
-  if (response.password === saniPassword) {
+  const passwordValid = bcrypt.compareSync(saniPassword, response.password);
+  if (passwordValid) {
     const sessionId = response.sessionid;
     const token = opentok.generateToken(sessionId);
     const key = API_KEY;
@@ -27,7 +29,7 @@ router.post('/joinbar', async (req, res) => {
         error: 'Sorry! That bar does not exist!',
       }).status(200);
     }
-    if (response.password !== saniPassword) {
+    if (!passwordValid) {
       res.json({
         error: 'Sorry! The password is incorrect!',
       }).status(200);
@@ -61,9 +63,11 @@ router.post('/createbar', async (req, res) => {
         const token = session.generateToken();
         const key = API_KEY;
         const saniBarName = barName.toLowerCase().trim();
-        const saniPassword = password.toLowerCase().trim();
+        const saniPassword = password.trim();
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(saniPassword, salt);
         // eslint-disable-next-line no-unused-vars
-        const response = DataBase.addSession(saniBarName, newSession, saniPassword);
+        const response = DataBase.addSession(saniBarName, newSession, hash);
         res.json({ newSession, token, key }).status(200);
       }
     });

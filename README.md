@@ -1,4 +1,4 @@
-# drinkcast API
+# DrinkCast API
 
 ## Summary
 This API project supports the drinkcast client app as its back end.
