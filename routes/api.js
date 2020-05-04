@@ -41,7 +41,8 @@ router.post('/joinbar', async (req, res) => {
 router.post('/createbar', async (req, res) => {
   const { password, barName } = req.body;
   let newSession = '';
-  const nameCheck = await DataBase.checkIfNameIsInUse(barName);
+  const saniBarName = barName.toLowerCase().trim();
+  const nameCheck = await DataBase.checkIfNameIsInUse(saniBarName);
   if (nameCheck === true || password.length <= 4) {
     if (nameCheck === true) {
       res.json({
@@ -62,7 +63,6 @@ router.post('/createbar', async (req, res) => {
         newSession = session.sessionId;
         const token = session.generateToken();
         const key = API_KEY;
-        const saniBarName = barName.toLowerCase().trim();
         const saniPassword = password.trim();
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(saniPassword, salt);
